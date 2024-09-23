@@ -36,6 +36,17 @@ const createSortableHeader = (header: string, accessorKey: string) => {
   }
 }
 
+const parseDateString = (dateString: string): Date => {
+  const [month, day, year] = dateString.split('/').map(Number);
+  return new Date(year, month - 1, day); // month is 0-indexed in JavaScript Date
+}
+
+const sortBirthDate = (a: string, b: string) => {
+  const dateA = parseDateString(a);
+  const dateB = parseDateString(b);
+  return dateB.getTime() - dateA.getTime(); // Reverse order for most recent first
+}
+
 export const columns: ColumnDef<User>[] = [
   {
     id: "select",
@@ -90,6 +101,11 @@ export const columns: ColumnDef<User>[] = [
     accessorKey: "birthDate",
     header: createSortableHeader("Birth Date", "birthDate"),
     cell: ({ row }) => <div>{row.getValue("birthDate")}</div>,
+    sortingFn: (rowA, rowB, columnId) => {
+      const a = rowA.getValue(columnId) as string;
+      const b = rowB.getValue(columnId) as string;
+      return sortBirthDate(a, b);
+    },
   },
   {
     id: "actions",
