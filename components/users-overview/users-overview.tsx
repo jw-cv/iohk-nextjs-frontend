@@ -2,10 +2,11 @@
 
 import React, { useState, useMemo } from 'react'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { DependantsByCountryChart } from "@/components/users-overview/charts/dependants-by-country-chart"
-import { AgeGroupDistributionChart } from "@/components/users-overview/charts/age-group-distribution-chart"
-import { DependantsByAgeChart } from "@/components/users-overview/charts/dependants-by-age-chart"
-import { UsersByGenderChart } from "@/components/users-overview/charts/users-by-gender-chart"
+import { DependantsByCountryChart } from '@/components/users-overview/charts/dependants-by-country-chart'
+import { AgeGroupDistributionChart } from '@/components/users-overview/charts/age-group-distribution-chart'
+import { DependantsByAgeChart } from '@/components/users-overview/charts/dependants-by-age-chart'
+import { UsersByGenderChart } from '@/components/users-overview/charts/users-by-gender-chart'
+import { AverageAgeByCountryChart } from '@/components/users-overview/charts/average-age-by-country-chart'
 
 type User = {
   name: string
@@ -72,8 +73,24 @@ export function UsersOverview() {
     return Object.entries(genderData).map(([gender, count]) => ({ gender, count }))
   }, [filteredData])
 
+  const ageByCountry = useMemo(() => {
+    const countryData: { [key: string]: { totalAge: number, count: number } } = {}
+    filteredData.forEach(user => {
+      const age = new Date().getFullYear() - new Date(user.birthDate).getFullYear()
+      if (!countryData[user.country]) {
+        countryData[user.country] = { totalAge: 0, count: 0 }
+      }
+      countryData[user.country].totalAge += age
+      countryData[user.country].count++
+    })
+    return Object.entries(countryData).map(([country, data]) => ({ 
+      country, 
+      averageAge: data.count > 0 ? data.totalAge / data.count : 0,
+    }))
+  }, [filteredData])
+
   return (
-    <div className="space-y-6 py-6">
+    <div className="space-y-6">
       <div className="pt-4 flex space-x-4">
         <Select onValueChange={setSelectedGender}>
           <SelectTrigger className="w-[180px]">
@@ -105,6 +122,7 @@ export function UsersOverview() {
         <AgeGroupDistributionChart data={ageGroupDistribution} />
         <DependantsByAgeChart data={dependantsByAge} />
         <UsersByGenderChart data={usersByGender} />
+        <AverageAgeByCountryChart data={ageByCountry} />
       </div>
     </div>
   )
