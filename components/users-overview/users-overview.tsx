@@ -37,16 +37,14 @@ export function UsersOverview() {
       const birthDate = new Date(user.birthDate)
       const birthYear = birthDate.getFullYear()
 
-      if (selectedDateRange === '1980-1990') {
-        dateMatch = birthYear >= 1980 && birthYear <= 1990
-      } else if (selectedDateRange === '1991-2000') {
-        dateMatch = birthYear >= 1991 && birthYear <= 2000
-      } else if (selectedDateRange === '2001-2010') {
-        dateMatch = birthYear >= 2001 && birthYear <= 2010
-      } else if (selectedDateRange === 'last-20-years') {
-        const twentyYearsAgo = new Date()
-        twentyYearsAgo.setFullYear(twentyYearsAgo.getFullYear() - 20)
-        dateMatch = birthDate >= twentyYearsAgo
+      if (selectedDateRange === 'since-2000') {
+        dateMatch = birthYear >= 2000
+      } else if (selectedDateRange === '1990-1999') {
+        dateMatch = birthYear >= 1990 && birthYear < 2000
+      } else if (selectedDateRange === '1980-1989') {
+        dateMatch = birthYear >= 1980 && birthYear < 1990
+      } else if (selectedDateRange === 'before-1980') {
+        dateMatch = birthYear < 1980
       }
 
       return genderMatch && dateMatch
@@ -124,10 +122,10 @@ export function UsersOverview() {
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All Dates</SelectItem>
-            <SelectItem value="1980-1990">1980-1990</SelectItem>
-            <SelectItem value="1991-2000">1991-2000</SelectItem>
-            <SelectItem value="2001-2010">2001-2010</SelectItem>
-            <SelectItem value="last-20-years">Last 20 Years</SelectItem>
+            <SelectItem value="since-2000">Since 2000</SelectItem>
+            <SelectItem value="1990-1999">1990-1999</SelectItem>
+            <SelectItem value="1980-1989">1980-1989</SelectItem>
+            <SelectItem value="before-1980">Before 1980</SelectItem>
           </SelectContent>
         </Select>
       </div>
