@@ -15,6 +15,10 @@ const chartConfig: ChartConfig = {
     label: "Age Group",
     color: "hsl(var(--chart-1))",
   },
+  count: {
+    label: "Count",
+    color: "hsl(var(--chart-1))",
+  },
 }
 
 export function AgeGroupDistributionChart({ data }: { data: AgeGroupData[] }) {
@@ -45,6 +49,7 @@ export function AgeGroupDistributionChart({ data }: { data: AgeGroupData[] }) {
                   <PolarGrid />
                   <Radar
                     dataKey="count"
+                    name="Count"
                     fill="var(--color-ageGroup)"
                     fillOpacity={0.6}
                     dot={{
