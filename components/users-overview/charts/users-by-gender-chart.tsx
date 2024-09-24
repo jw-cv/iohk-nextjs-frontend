@@ -104,7 +104,7 @@ export function UsersByGenderChart({ data }: { data: UsersByGenderData[] }) {
                                 y={(viewBox.cy || 0) + 24}
                                 className="fill-muted-foreground"
                               >
-                                Users
+                                {totalUsers === 1 ? "User" : "Users"}
                               </tspan>
                             </text>
                           )
