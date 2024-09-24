@@ -1,7 +1,7 @@
 "use client"
 
-import { AlertCircle, TrendingUp } from "lucide-react"
-import { Bar, BarChart, CartesianGrid, Rectangle, XAxis, YAxis, ResponsiveContainer } from "recharts"
+import { TrendingUp, AlertCircle } from "lucide-react"
+import { Bar, BarChart, CartesianGrid, Rectangle, XAxis, ResponsiveContainer } from "recharts"
 
 import {
   Card,
@@ -44,8 +44,6 @@ export function AverageAgeByCountryChart({ data }: { data: AgeByCountryData[] })
     ? data.reduce((sum, country) => sum + country.averageAge, 0) / data.length
     : 0
 
-  const activeIndex = chartData.findIndex(item => item.averageAge === Math.max(...chartData.map(d => d.averageAge)))
-
   return (
     <Card className="w-full h-full flex flex-col md:col-span-1">
       <CardHeader className="flex-none">
@@ -79,7 +77,6 @@ export function AverageAgeByCountryChart({ data }: { data: AgeByCountryData[] })
                       </text>
                     )}
                   />
-                  <YAxis hide />
                   <ChartTooltip
                     cursor={false}
                     content={<ChartTooltipContent hideLabel />}
@@ -87,8 +84,7 @@ export function AverageAgeByCountryChart({ data }: { data: AgeByCountryData[] })
                   <Bar
                     dataKey="averageAge"
                     strokeWidth={2}
-                    radius={[4, 4, 0, 0]}
-                    activeIndex={activeIndex}
+                    radius={8}
                     activeBar={({ ...props }) => {
                       return (
                         <Rectangle
