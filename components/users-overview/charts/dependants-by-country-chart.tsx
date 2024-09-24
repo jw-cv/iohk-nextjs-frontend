@@ -1,6 +1,6 @@
 "use client"
 
-import { TrendingUp } from "lucide-react"
+import { TrendingUp, AlertCircle } from "lucide-react"
 import { Bar, BarChart, CartesianGrid, Rectangle, XAxis } from "recharts"
 
 import {
@@ -51,8 +51,9 @@ export function DependantsByCountryChart({ data }: { data: DependantsByCountryDa
     fill: `hsl(var(--chart-${(index % 5) + 1}))`,
   }))
 
-  const maxDependants = Math.max(...data.map(item => item.dependants))
-  const countryWithMostDependants = data.find(item => item.dependants === maxDependants)
+  const hasData = chartData.length > 0
+  const maxDependants = hasData ? Math.max(...data.map(item => item.dependants)) : 0
+  const countryWithMostDependants = hasData ? data.find(item => item.dependants === maxDependants) : null
 
   return (
     <Card className="w-full h-full flex flex-col">
@@ -61,48 +62,65 @@ export function DependantsByCountryChart({ data }: { data: DependantsByCountryDa
         <CardDescription>Distribution of dependants across countries</CardDescription>
       </CardHeader>
       <CardContent className="flex-grow">
-        <ChartContainer config={chartConfig}>
-          <BarChart data={chartData}>
-            <CartesianGrid vertical={false} />
-            <XAxis
-              dataKey="country"
-              tickLine={false}
-              tickMargin={10}
-              axisLine={false}
-              tickFormatter={(value) =>
-                chartConfig[value as keyof typeof chartConfig]?.label || value
-              }
-            />
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent hideLabel />}
-            />
-            <Bar
-              dataKey="dependants"
-              strokeWidth={2}
-              radius={8}
-              activeBar={({ ...props }) => {
-                return (
-                  <Rectangle
-                    {...props}
-                    fillOpacity={0.8}
-                    stroke={props.fill}
-                    strokeDasharray={4}
-                    strokeDashoffset={4}
-                  />
-                )
-              }}
-            />
-          </BarChart>
-        </ChartContainer>
+        {hasData ? (
+          <ChartContainer config={chartConfig}>
+            <BarChart data={chartData}>
+              <CartesianGrid vertical={false} />
+              <XAxis
+                dataKey="country"
+                tickLine={false}
+                tickMargin={10}
+                axisLine={false}
+                tickFormatter={(value) =>
+                  chartConfig[value as keyof typeof chartConfig]?.label || value
+                }
+              />
+              <ChartTooltip
+                cursor={false}
+                content={<ChartTooltipContent hideLabel />}
+              />
+              <Bar
+                dataKey="dependants"
+                strokeWidth={2}
+                radius={8}
+                activeBar={({ ...props }) => {
+                  return (
+                    <Rectangle
+                      {...props}
+                      fillOpacity={0.8}
+                      stroke={props.fill}
+                      strokeDasharray={4}
+                      strokeDashoffset={4}
+                    />
+                  )
+                }}
+              />
+            </BarChart>
+          </ChartContainer>
+        ) : (
+          <div className="w-full h-full flex items-center justify-center">
+            <div className="text-center">
+              <AlertCircle className="mx-auto h-12 w-12 text-muted-foreground" />
+              <p className="mt-2 text-sm text-muted-foreground">No data available for the selected filters</p>
+            </div>
+          </div>
+        )}
       </CardContent>
       <CardFooter className="flex-col items-start gap-2 text-sm">
-        <div className="flex gap-2 font-medium leading-none">
-          {countryWithMostDependants?.country} has the highest number of dependants ({countryWithMostDependants?.dependants}) <TrendingUp className="h-4 w-4" />
-        </div>
-        <div className="leading-none text-muted-foreground">
-          Showing total dependants for each country
-        </div>
+        {hasData && countryWithMostDependants ? (
+          <>
+            <div className="flex gap-2 font-medium leading-none">
+              {countryWithMostDependants.country} has the highest number of dependants ({countryWithMostDependants.dependants}) <TrendingUp className="h-4 w-4" />
+            </div>
+            <div className="leading-none text-muted-foreground">
+              Showing total dependants for each country
+            </div>
+          </>
+        ) : (
+          <div className="leading-none text-muted-foreground">
+            No dependant data available for the current filters
+          </div>
+        )}
       </CardFooter>
     </Card>
   )
