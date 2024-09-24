@@ -1,9 +1,10 @@
 "use client"
 
 import React, { useState, useMemo } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LineChart, Line } from 'recharts'
+import { DependantsByCountryChart } from "@/components/users-overview/charts/dependants-by-country-chart"
+import { AgeGroupDistributionChart } from "@/components/users-overview/charts/age-group-distribution-chart"
+import { GenderDistributionChart } from "@/components/users-overview/charts/gender-distribution-chart"
 
 type User = {
   name: string
@@ -58,7 +59,11 @@ export function UsersOverview() {
     filteredData.forEach(user => {
       countryData[user.country] = (countryData[user.country] || 0) + user.dependants
     })
-    return Object.entries(countryData).map(([country, dependants]) => ({ country, dependants }))
+    return Object.entries(countryData).map(([country, dependants]) => ({ 
+      country, 
+      dependants, 
+      fill: `hsl(var(--chart-${Object.keys(countryData).indexOf(country) + 1}))`
+    }))
   }, [filteredData])
 
   const ageGroups = useMemo(() => {
@@ -80,7 +85,7 @@ export function UsersOverview() {
   }, [filteredData])
 
   return (
-    <div className="space-y-6 py-6">
+    <div className="space-y-6">
       <div className="pt-4 flex space-x-4">
         <Select onValueChange={setSelectedGender}>
           <SelectTrigger className="w-[180px]">
@@ -107,59 +112,11 @@ export function UsersOverview() {
         </Select>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Dependants by Country</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={dependantsByCountry}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="country" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="dependants" fill="#8884d8" />
-            </BarChart>
-          </ResponsiveContainer>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Age Group Distribution</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={ageGroups}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="group" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="count" fill="#82ca9d" />
-            </BarChart>
-          </ResponsiveContainer>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Gender Distribution</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={genderDistribution}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="gender" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Line type="monotone" dataKey="count" stroke="#8884d8" />
-            </LineChart>
-          </ResponsiveContainer>
-        </CardContent>
-      </Card>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <DependantsByCountryChart data={dependantsByCountry} />
+        <AgeGroupDistributionChart data={ageGroups} />
+        <GenderDistributionChart data={genderDistribution} />
+      </div>
     </div>
   )
 }
