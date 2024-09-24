@@ -1,7 +1,7 @@
 "use client"
 
 import { ColumnDef } from "@tanstack/react-table"
-import { ArrowUpDown, MoreHorizontal } from "lucide-react"
+import { ArrowUpDown, ArrowUp, ArrowDown, MoreHorizontal } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import {
@@ -22,7 +22,7 @@ export type User = {
   birthDate: string
 }
 
-const createSortableHeader = (header: string, accessorKey: string) => {
+const createSortableHeader = (header: string, accessorKey: string, isDateColumn = false) => {
   return ({ column }: { column: any }) => {
     return (
       <Button
@@ -30,7 +30,23 @@ const createSortableHeader = (header: string, accessorKey: string) => {
         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
       >
         {header}
-        <ArrowUpDown className="ml-2 h-4 w-4" />
+        {isDateColumn ? (
+          column.getIsSorted() === "asc" ? (
+            <ArrowDown className="ml-2 h-4 w-4" />
+          ) : column.getIsSorted() === "desc" ? (
+            <ArrowUp className="ml-2 h-4 w-4" />
+          ) : (
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          )
+        ) : (
+          column.getIsSorted() === "asc" ? (
+            <ArrowUp className="ml-2 h-4 w-4" />
+          ) : column.getIsSorted() === "desc" ? (
+            <ArrowDown className="ml-2 h-4 w-4" />
+          ) : (
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          )
+        )}
       </Button>
     )
   }
@@ -99,7 +115,7 @@ export const columns: ColumnDef<User>[] = [
   },
   {
     accessorKey: "birthDate",
-    header: createSortableHeader("Birth Date", "birthDate"),
+    header: createSortableHeader("Birth Date", "birthDate", true),
     cell: ({ row }) => <div>{row.getValue("birthDate")}</div>,
     sortingFn: (rowA, rowB, columnId) => {
       const a = rowA.getValue(columnId) as string;
