@@ -79,7 +79,6 @@ export function UsersByGenderChart({ data }: { data: UsersByGenderData[] }) {
                     dataKey="count"
                     background
                     cornerRadius={10}
-                    clockWise
                   />
                   <PolarRadiusAxis tick={false} tickLine={false} axisLine={false}>
                     <Label
