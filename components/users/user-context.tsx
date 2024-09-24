@@ -9,7 +9,7 @@ type User = {
   gender: string;
   country: string;
   dependants: number;
-  birthDate: string;
+  birthDate: Date; // Change to Date
 };
 
 type UserContextType = {
@@ -77,7 +77,11 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }),
       });
       const { data } = await response.json();
-      setData(data.users);
+      const processedData = data.users.map((user: any) => ({
+        ...user,
+        birthDate: new Date(user.birthDate), // Convert birthDate to Date object
+      }));
+      setData(processedData);
     };
 
     fetchData();

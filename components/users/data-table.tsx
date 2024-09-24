@@ -14,6 +14,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table"
 import { ChevronDown } from "lucide-react"
+import { formatDateManually } from "@/utils/formatDate" // Import the manual formatting function
 
 import { Button } from "@/components/ui/button"
 import {
@@ -61,9 +62,23 @@ export function DataTable<TData, TValue>({
   globalFilter,
   setGlobalFilter,
 }: DataTableProps<TData, TValue>) {
+  const formattedColumns = React.useMemo(
+    () =>
+      columns.map((column) => ({
+        ...column,
+        cell: (info: any) => {
+          if (column.id === "birthDate" && info.getValue()) {
+            return formatDateManually(info.getValue());
+          }
+          return column.cell ? column.cell(info) : info.getValue();
+        },
+      })),
+    [columns]
+  )
+
   const table = useReactTable({
     data,
-    columns,
+    columns: formattedColumns, // Use formattedColumns instead of columns
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),

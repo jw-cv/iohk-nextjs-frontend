@@ -11,6 +11,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { formatDateManually } from "@/utils/formatDate" // Import the manual formatting function
 
 export type User = {
   name: string
@@ -19,7 +20,7 @@ export type User = {
   gender: string
   country: string
   dependants: number
-  birthDate: string
+  birthDate: Date
 }
 
 const createSortableHeader = (header: string, accessorKey: string, isDateColumn = false) => {
@@ -52,15 +53,8 @@ const createSortableHeader = (header: string, accessorKey: string, isDateColumn 
   }
 }
 
-const parseDateString = (dateString: string): Date => {
-  const [month, day, year] = dateString.split('/').map(Number);
-  return new Date(year, month - 1, day); // month is 0-indexed in JavaScript Date
-}
-
-const sortBirthDate = (a: string, b: string) => {
-  const dateA = parseDateString(a);
-  const dateB = parseDateString(b);
-  return dateB.getTime() - dateA.getTime(); // Reverse order for most recent first
+const sortBirthDate = (a: Date, b: Date) => {
+  return b.getTime() - a.getTime(); // Reverse order for most recent first
 }
 
 export const columns: ColumnDef<User>[] = [
@@ -116,10 +110,10 @@ export const columns: ColumnDef<User>[] = [
   {
     accessorKey: "birthDate",
     header: createSortableHeader("Birth Date", "birthDate", true),
-    cell: ({ row }) => <div>{row.getValue("birthDate")}</div>,
+    cell: ({ row }) => <div>{formatDateManually(row.getValue("birthDate"))}</div>, // Format the Date object
     sortingFn: (rowA, rowB, columnId) => {
-      const a = rowA.getValue(columnId) as string;
-      const b = rowB.getValue(columnId) as string;
+      const a = rowA.getValue(columnId) as Date;
+      const b = rowB.getValue(columnId) as Date;
       return sortBirthDate(a, b);
     },
   },
@@ -145,7 +139,7 @@ export const columns: ColumnDef<User>[] = [
               Copy user number
             </DropdownMenuItem>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(user.birthDate)}
+              onClick={() => navigator.clipboard.writeText(user.birthDate.toISOString())}
             >
               Copy user birth date
             </DropdownMenuItem>
