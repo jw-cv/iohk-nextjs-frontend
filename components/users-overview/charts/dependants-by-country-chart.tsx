@@ -1,11 +1,26 @@
+"use client"
+
+import { TrendingUp } from "lucide-react"
 import { Bar, BarChart, CartesianGrid, Rectangle, XAxis } from "recharts"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
+
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import {
+  ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart"
 
 type DependantsByCountryData = {
   country: string
   dependants: number
-  fill: string
 }
 
 const chartConfig: ChartConfig = {
@@ -31,15 +46,23 @@ const chartConfig: ChartConfig = {
 }
 
 export function DependantsByCountryChart({ data }: { data: DependantsByCountryData[] }) {
+  const chartData = data.map((item, index) => ({
+    ...item,
+    fill: `hsl(var(--chart-${(index % 5) + 1}))`,
+  }))
+
+  const maxDependants = Math.max(...data.map(item => item.dependants))
+  const countryWithMostDependants = data.find(item => item.dependants === maxDependants)
+
   return (
-    <Card className="w-full">
+    <Card className="w-full h-full flex flex-col">
       <CardHeader>
         <CardTitle>Dependants by Country</CardTitle>
         <CardDescription>Distribution of dependants across countries</CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="flex-grow">
         <ChartContainer config={chartConfig}>
-          <BarChart accessibilityLayer data={data}>
+          <BarChart data={chartData}>
             <CartesianGrid vertical={false} />
             <XAxis
               dataKey="country"
@@ -47,7 +70,7 @@ export function DependantsByCountryChart({ data }: { data: DependantsByCountryDa
               tickMargin={10}
               axisLine={false}
               tickFormatter={(value) =>
-                chartConfig[value as keyof typeof chartConfig]?.label
+                chartConfig[value as keyof typeof chartConfig]?.label || value
               }
             />
             <ChartTooltip
@@ -58,13 +81,12 @@ export function DependantsByCountryChart({ data }: { data: DependantsByCountryDa
               dataKey="dependants"
               strokeWidth={2}
               radius={8}
-              activeIndex={0}
               activeBar={({ ...props }) => {
                 return (
                   <Rectangle
                     {...props}
                     fillOpacity={0.8}
-                    stroke={props.payload.fill}
+                    stroke={props.fill}
                     strokeDasharray={4}
                     strokeDashoffset={4}
                   />
@@ -76,7 +98,7 @@ export function DependantsByCountryChart({ data }: { data: DependantsByCountryDa
       </CardContent>
       <CardFooter className="flex-col items-start gap-2 text-sm">
         <div className="flex gap-2 font-medium leading-none">
-          Latvia has the highest number of dependants
+          {countryWithMostDependants?.country} has the highest number of dependants ({countryWithMostDependants?.dependants}) <TrendingUp className="h-4 w-4" />
         </div>
         <div className="leading-none text-muted-foreground">
           Showing total dependants for each country
