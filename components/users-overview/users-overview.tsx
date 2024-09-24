@@ -37,8 +37,8 @@ const calculateAge = (birthDate: string): number => {
 }
 
 const getAgeGroup = (age: number): string => {
-  const groups = ['0-10', '10-20', '20-30', '30-40', '40-50', '50-60', '60-70', '70-80', '80-90', '90-100']
-  const index = Math.min(Math.floor(age / 10), 9)
+  const groups = Array.from({ length: 20 }, (_, i) => `${i * 5}-${(i + 1) * 5 - 1}`)
+  const index = Math.min(Math.floor(age / 5), 19)
   return groups[index]
 }
 
