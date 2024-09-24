@@ -52,34 +52,36 @@ export function DependantsByAgeChart({ data }: { data: { birthDate: string; depe
   return (
     <Card className="w-full h-full flex flex-col">
       <CardHeader>
-        <CardTitle>Dependants by Age</CardTitle>
-        <CardDescription>Distribution of dependants across user ages</CardDescription>
+        <CardTitle className="text-left">Dependants by Age</CardTitle>
+        <CardDescription className="text-left">Distribution of dependants across user ages</CardDescription>
       </CardHeader>
-      <CardContent className="flex-grow">
-        <div className="w-full h-full" style={{ minHeight: "300px" }}>
+      <CardContent className="flex-grow p-4">
+        <div className="w-full h-full flex items-center justify-center" style={{ minHeight: "300px" }}>
           {hasData ? (
-            <ChartContainer config={chartConfig}>
+            <ChartContainer config={chartConfig} className="w-full h-full">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart
                   data={chartData}
                   margin={{
-                    top: 24,
-                    right: 24,
-                    bottom: 24,
-                    left: 24,
+                    top: 20,
+                    right: 30,
+                    bottom: 20,
+                    left: 30,
                   }}
                 >
-                  <CartesianGrid vertical={false} />
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} />
                   <XAxis
                     dataKey="age"
                     tickLine={false}
                     axisLine={false}
                     tickMargin={10}
+                    tick={{ fontSize: 12 }}
                   />
                   <YAxis
                     tickLine={false}
                     axisLine={false}
                     tickMargin={10}
+                    tick={{ fontSize: 12 }}
                   />
                   <ChartTooltip
                     cursor={false}
@@ -98,7 +100,7 @@ export function DependantsByAgeChart({ data }: { data: { birthDate: string; depe
                     strokeWidth={2}
                     dot={({ payload, ...props }) => (
                       <Dot
-                        r={5}
+                        r={4}
                         cx={props.cx}
                         cy={props.cy}
                         fill={`hsl(var(--chart-${(payload.age % 5) + 1}))`}
@@ -110,19 +112,17 @@ export function DependantsByAgeChart({ data }: { data: { birthDate: string; depe
               </ResponsiveContainer>
             </ChartContainer>
           ) : (
-            <div className="w-full h-full flex items-center justify-center">
-              <div className="text-center">
-                <AlertCircle className="mx-auto h-12 w-12 text-muted-foreground" />
-                <p className="mt-2 text-sm text-muted-foreground">No data available for the selected filters</p>
-              </div>
+            <div className="text-center">
+              <AlertCircle className="mx-auto h-12 w-12 text-muted-foreground" />
+              <p className="mt-2 text-sm text-muted-foreground">No data available for the selected filters</p>
             </div>
           )}
         </div>
       </CardContent>
-      <CardFooter className="flex-col items-start gap-2 text-sm">
+      <CardFooter className="flex-col items-start gap-2 text-sm pt-2">
         {hasData ? (
           <>
-            <div className="flex gap-2 font-medium leading-none">
+            <div className="flex items-center gap-2 font-medium leading-none">
               Trending up by {((chartData[chartData.length - 1].dependants - chartData[0].dependants) / chartData[0].dependants * 100).toFixed(1)}% across age range <TrendingUp className="h-4 w-4" />
             </div>
             <div className="leading-none text-muted-foreground">
