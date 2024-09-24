@@ -24,10 +24,10 @@ const data: User[] = [
   { name: "Sarah", surname: "Van Que", number: "587", gender: "Female", country: "Latvia", dependants: 4, birthDate: "6/22/1989" },
 ]
 
-const calculateAge = (birthDate: string) => {
+const calculateAge = (birthDate: string): number => {
   const today = new Date()
-  const birthDateParts = birthDate.split('/')
-  const birth = new Date(parseInt(birthDateParts[2]), parseInt(birthDateParts[0]) - 1, parseInt(birthDateParts[1]))
+  const [month, day, year] = birthDate.split('/').map(Number)
+  const birth = new Date(year, month - 1, day)
   let age = today.getFullYear() - birth.getFullYear()
   const monthDiff = today.getMonth() - birth.getMonth()
   if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
@@ -36,11 +36,10 @@ const calculateAge = (birthDate: string) => {
   return age
 }
 
-const getAgeGroup = (age: number) => {
-  if (age < 20) return '0-19'
-  if (age < 40) return '20-39'
-  if (age < 60) return '40-59'
-  return '60+'
+const getAgeGroup = (age: number): string => {
+  const groups = ['0-10', '10-20', '20-30', '30-40', '40-50', '50-60', '60-70', '70-80', '80-90', '90-100']
+  const index = Math.min(Math.floor(age / 10), 9)
+  return groups[index]
 }
 
 export function UsersOverview() {
@@ -66,14 +65,14 @@ export function UsersOverview() {
     }))
   }, [filteredData])
 
-  const ageGroups = useMemo(() => {
+  const ageGroupDistribution = useMemo(() => {
     const groups: { [key: string]: number } = {}
     filteredData.forEach(user => {
       const age = calculateAge(user.birthDate)
       const group = getAgeGroup(age)
       groups[group] = (groups[group] || 0) + 1
     })
-    return Object.entries(groups).map(([group, count]) => ({ group, count }))
+    return Object.entries(groups).map(([ageGroup, count]) => ({ ageGroup, count }))
   }, [filteredData])
 
   const genderDistribution = useMemo(() => {
@@ -114,7 +113,7 @@ export function UsersOverview() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <DependantsByCountryChart data={dependantsByCountry} />
-        <AgeGroupDistributionChart data={ageGroups} />
+        <AgeGroupDistributionChart data={ageGroupDistribution} />
         <GenderDistributionChart data={genderDistribution} />
       </div>
     </div>
