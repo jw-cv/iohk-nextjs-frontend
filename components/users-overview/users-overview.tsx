@@ -80,8 +80,8 @@ export function UsersOverview() {
   }, [filteredData])
 
   return (
-    <div className="space-y-4">
-      <div className="flex space-x-4">
+    <div className="space-y-6 py-6">
+      <div className="pt-4 flex space-x-4">
         <Select onValueChange={setSelectedGender}>
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="Select Gender" />
