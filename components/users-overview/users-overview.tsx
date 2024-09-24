@@ -28,14 +28,30 @@ const data: User[] = [
 
 export function UsersOverview() {
   const [selectedGender, setSelectedGender] = useState<string | undefined>()
-  const [selectedDate, setSelectedDate] = useState<string | undefined>()
+  const [selectedDateRange, setSelectedDateRange] = useState<string | undefined>()
 
   const filteredData = useMemo(() => {
-    return data.filter(user => 
-      (!selectedGender || selectedGender === 'all' || user.gender === selectedGender) &&
-      (!selectedDate || selectedDate === 'all' || user.birthDate === selectedDate)
-    )
-  }, [selectedGender, selectedDate])
+    return data.filter(user => {
+      const genderMatch = !selectedGender || selectedGender === 'all' || user.gender === selectedGender
+      let dateMatch = true
+      const birthDate = new Date(user.birthDate)
+      const birthYear = birthDate.getFullYear()
+
+      if (selectedDateRange === '1980-1990') {
+        dateMatch = birthYear >= 1980 && birthYear <= 1990
+      } else if (selectedDateRange === '1991-2000') {
+        dateMatch = birthYear >= 1991 && birthYear <= 2000
+      } else if (selectedDateRange === '2001-2010') {
+        dateMatch = birthYear >= 2001 && birthYear <= 2010
+      } else if (selectedDateRange === 'last-20-years') {
+        const twentyYearsAgo = new Date()
+        twentyYearsAgo.setFullYear(twentyYearsAgo.getFullYear() - 20)
+        dateMatch = birthDate >= twentyYearsAgo
+      }
+
+      return genderMatch && dateMatch
+    })
+  }, [selectedGender, selectedDateRange])
 
   const dependantsByCountry = useMemo(() => {
     const countryData: { [key: string]: number } = {}
@@ -102,17 +118,16 @@ export function UsersOverview() {
             <SelectItem value="Female">Female</SelectItem>
           </SelectContent>
         </Select>
-        <Select onValueChange={setSelectedDate}>
+        <Select onValueChange={setSelectedDateRange}>
           <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Select Date" />
+            <SelectValue placeholder="Select Date Range" />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All Dates</SelectItem>
-            {data.map(user => (
-              <SelectItem key={user.birthDate} value={user.birthDate}>
-                {user.birthDate}
-              </SelectItem>
-            ))}
+            <SelectItem value="1980-1990">1980-1990</SelectItem>
+            <SelectItem value="1991-2000">1991-2000</SelectItem>
+            <SelectItem value="2001-2010">2001-2010</SelectItem>
+            <SelectItem value="last-20-years">Last 20 Years</SelectItem>
           </SelectContent>
         </Select>
       </div>
