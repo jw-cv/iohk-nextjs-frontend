@@ -69,7 +69,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 number
                 gender
                 country
-                dependents
+                dependants
                 birthDate
               }
             }
