@@ -9,7 +9,7 @@ const data = [
   { name: "Sarah", surname: "Van Que", number: "587", gender: "Female", country: "Latvia", dependants: 4, birthDate: "6/22/1989" },
 ]
 
-export default function UsersPage() {
+export function Users() {
   return (
     <div className="container mx-auto py-10">
       <DataTable columns={columns} data={data} />

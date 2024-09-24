@@ -5,7 +5,8 @@ import { Moon, Sun } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Card, CardContent } from "@/components/ui/card"
-import UsersPage from "./users/page"
+import { Users } from "./users/users"
+import { UsersOverview } from "./users-overview/users-overview"
 
 export function LandingPage() {
   const [isDarkMode, setIsDarkMode] = useState(false)
@@ -50,7 +51,7 @@ export function LandingPage() {
               <CardContent className="p-6">
                 <h2 className="text-2xl font-semibold mb-4">Users</h2>
                 <p>Here you can manage individual user accounts and their settings.</p>
-                <UsersPage></UsersPage>
+                <Users/>
               </CardContent>
             </Card>
           </TabsContent>
@@ -59,6 +60,7 @@ export function LandingPage() {
               <CardContent className="p-6">
                 <h2 className="text-2xl font-semibold mb-4">Users Overview</h2>
                 <p>This section provides a high-level overview of all user activities and statistics.</p>
+                <UsersOverview/>
               </CardContent>
             </Card>
           </TabsContent>
