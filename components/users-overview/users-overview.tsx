@@ -2,9 +2,10 @@
 
 import React, { useState, useMemo } from 'react'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { DependantsByCountryChart } from '@/components/users-overview/charts/dependants-by-country-chart'
-import { AgeGroupDistributionChart } from '@/components/users-overview/charts/age-group-distribution-chart'
-import { DependantsByAgeChart } from '@/components/users-overview/charts/dependants-by-age-chart'
+import { DependantsByCountryChart } from "@/components/users-overview/charts/dependants-by-country-chart"
+import { AgeGroupDistributionChart } from "@/components/users-overview/charts/age-group-distribution-chart"
+import { DependantsByAgeChart } from "@/components/users-overview/charts/dependants-by-age-chart"
+import { UsersByGenderChart } from "@/components/users-overview/charts/users-by-gender-chart"
 
 type User = {
   name: string
@@ -63,6 +64,14 @@ export function UsersOverview() {
     }))
   }, [filteredData])
 
+  const usersByGender = useMemo(() => {
+    const genderData: { [key: string]: number } = {}
+    filteredData.forEach(user => {
+      genderData[user.gender] = (genderData[user.gender] || 0) + 1
+    })
+    return Object.entries(genderData).map(([gender, count]) => ({ gender, count }))
+  }, [filteredData])
+
   return (
     <div className="space-y-6 py-6">
       <div className="pt-4 flex space-x-4">
@@ -95,6 +104,7 @@ export function UsersOverview() {
         <DependantsByCountryChart data={dependantsByCountry} />
         <AgeGroupDistributionChart data={ageGroupDistribution} />
         <DependantsByAgeChart data={dependantsByAge} />
+        <UsersByGenderChart data={usersByGender} />
       </div>
     </div>
   )
