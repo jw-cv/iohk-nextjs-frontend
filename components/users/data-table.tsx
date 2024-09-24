@@ -35,27 +35,32 @@ import {
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
+  sorting: SortingState
+  setSorting: React.Dispatch<React.SetStateAction<SortingState>>
+  columnFilters: ColumnFiltersState
+  setColumnFilters: React.Dispatch<React.SetStateAction<ColumnFiltersState>>
+  columnVisibility: VisibilityState
+  setColumnVisibility: React.Dispatch<React.SetStateAction<VisibilityState>>
+  rowSelection: any
+  setRowSelection: React.Dispatch<React.SetStateAction<any>>
+  globalFilter: string
+  setGlobalFilter: React.Dispatch<React.SetStateAction<string>>
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  sorting,
+  setSorting,
+  columnFilters,
+  setColumnFilters,
+  columnVisibility,
+  setColumnVisibility,
+  rowSelection,
+  setRowSelection,
+  globalFilter,
+  setGlobalFilter,
 }: DataTableProps<TData, TValue>) {
-  const [sorting, setSorting] = React.useState<SortingState>([])
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
-  const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({
-    name: true,
-    surname: true,
-    number: false,
-    gender: false,
-    country: false,
-    dependants: false,
-    birthDate: false,
-    actions: true,
-  })
-  const [rowSelection, setRowSelection] = React.useState({})
-  const [globalFilter, setGlobalFilter] = React.useState("")
-
   const table = useReactTable({
     data,
     columns,

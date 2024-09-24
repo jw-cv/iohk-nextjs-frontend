@@ -1,107 +1,89 @@
 "use client"
 
-import React, { useState, useMemo } from 'react'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { DependantsByCountryChart } from '@/components/users-overview/charts/dependants-by-country-chart'
-import { AgeGroupDistributionChart } from '@/components/users-overview/charts/age-group-distribution-chart'
-import { DependantsByAgeChart } from '@/components/users-overview/charts/dependants-by-age-chart'
-import { UsersByGenderChart } from '@/components/users-overview/charts/users-by-gender-chart'
-import { AverageAgeByCountryChart } from '@/components/users-overview/charts/average-age-by-country-chart'
-
-type User = {
-  name: string
-  surname: string
-  number: string
-  gender: string
-  country: string
-  dependants: number
-  birthDate: string
-}
-
-const data: User[] = [
-  { name: "Jack", surname: "Front", number: "123", gender: "Male", country: "Latvia", dependants: 5, birthDate: "10/3/1981" },
-  { name: "Jill", surname: "Human", number: "654", gender: "Female", country: "Spain", dependants: 0, birthDate: "6/2/1983" },
-  { name: "Robert", surname: "Pullman", number: "456", gender: "Male", country: "German", dependants: 2, birthDate: "5/4/1999" },
-  { name: "Chun Li", surname: "Suzuki", number: "987", gender: "Female", country: "China", dependants: 1, birthDate: "11/9/2001" },
-  { name: "Sarah", surname: "Van Que", number: "587", gender: "Female", country: "Latvia", dependants: 4, birthDate: "6/22/1989" },
-]
+import React, { useMemo } from 'react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { DependantsByCountryChart } from '@/components/users-overview/charts/dependants-by-country-chart';
+import { AgeGroupDistributionChart } from '@/components/users-overview/charts/age-group-distribution-chart';
+import { DependantsByAgeChart } from '@/components/users-overview/charts/dependants-by-age-chart';
+import { UsersByGenderChart } from '@/components/users-overview/charts/users-by-gender-chart';
+import { AverageAgeByCountryChart } from '@/components/users-overview/charts/average-age-by-country-chart';
+import { useUserContext } from '../users/user-context';
 
 export function UsersOverview() {
-  const [selectedGender, setSelectedGender] = useState<string | undefined>()
-  const [selectedDateRange, setSelectedDateRange] = useState<string | undefined>()
+  const { data, selectedGender, setSelectedGender, selectedDateRange, setSelectedDateRange } = useUserContext();
 
   const filteredData = useMemo(() => {
     return data.filter(user => {
-      const genderMatch = !selectedGender || selectedGender === 'all' || user.gender === selectedGender
-      let dateMatch = true
-      const birthDate = new Date(user.birthDate)
-      const birthYear = birthDate.getFullYear()
+      const genderMatch = !selectedGender || selectedGender === 'all' || user.gender === selectedGender;
+      let dateMatch = true;
+      const birthDate = new Date(user.birthDate);
+      const birthYear = birthDate.getFullYear();
 
       if (selectedDateRange === 'since-2000') {
-        dateMatch = birthYear >= 2000
+        dateMatch = birthYear >= 2000;
       } else if (selectedDateRange === '1990-1999') {
-        dateMatch = birthYear >= 1990 && birthYear < 2000
+        dateMatch = birthYear >= 1990 && birthYear < 2000;
       } else if (selectedDateRange === '1980-1989') {
-        dateMatch = birthYear >= 1980 && birthYear < 1990
+        dateMatch = birthYear >= 1980 && birthYear < 1990;
       } else if (selectedDateRange === 'before-1980') {
-        dateMatch = birthYear < 1980
+        dateMatch = birthYear < 1980;
       }
 
-      return genderMatch && dateMatch
-    })
-  }, [selectedGender, selectedDateRange])
+      return genderMatch && dateMatch;
+    });
+  }, [data, selectedGender, selectedDateRange]);
 
   const dependantsByCountry = useMemo(() => {
-    const countryData: { [key: string]: number } = {}
+    const countryData: { [key: string]: number } = {};
     filteredData.forEach(user => {
-      countryData[user.country] = (countryData[user.country] || 0) + user.dependants
-    })
+      countryData[user.country] = (countryData[user.country] || 0) + user.dependants;
+    });
     return Object.entries(countryData).map(([country, dependants]) => ({ 
       country, 
       dependants, 
-    }))
-  }, [filteredData])
+    }));
+  }, [filteredData]);
 
   const ageGroupDistribution = useMemo(() => {
-    const groups: { [key: string]: number } = {}
+    const groups: { [key: string]: number } = {};
     filteredData.forEach(user => {
-      const age = new Date().getFullYear() - new Date(user.birthDate).getFullYear()
-      const group = `${Math.floor(age / 5) * 5}-${Math.floor(age / 5) * 5 + 4}`
-      groups[group] = (groups[group] || 0) + 1
-    })
-    return Object.entries(groups).map(([ageGroup, count]) => ({ ageGroup, count }))
-  }, [filteredData])
+      const age = new Date().getFullYear() - new Date(user.birthDate).getFullYear();
+      const group = `${Math.floor(age / 5) * 5}-${Math.floor(age / 5) * 5 + 4}`;
+      groups[group] = (groups[group] || 0) + 1;
+    });
+    return Object.entries(groups).map(([ageGroup, count]) => ({ ageGroup, count }));
+  }, [filteredData]);
 
   const dependantsByAge = useMemo(() => {
     return filteredData.map(user => ({
       birthDate: user.birthDate,
       dependants: user.dependants,
-    }))
-  }, [filteredData])
+    }));
+  }, [filteredData]);
 
   const usersByGender = useMemo(() => {
-    const genderData: { [key: string]: number } = {}
+    const genderData: { [key: string]: number } = {};
     filteredData.forEach(user => {
-      genderData[user.gender] = (genderData[user.gender] || 0) + 1
-    })
-    return Object.entries(genderData).map(([gender, count]) => ({ gender, count }))
-  }, [filteredData])
+      genderData[user.gender] = (genderData[user.gender] || 0) + 1;
+    });
+    return Object.entries(genderData).map(([gender, count]) => ({ gender, count }));
+  }, [filteredData]);
 
   const ageByCountry = useMemo(() => {
-    const countryData: { [key: string]: { totalAge: number, count: number } } = {}
+    const countryData: { [key: string]: { totalAge: number, count: number } } = {};
     filteredData.forEach(user => {
-      const age = new Date().getFullYear() - new Date(user.birthDate).getFullYear()
+      const age = new Date().getFullYear() - new Date(user.birthDate).getFullYear();
       if (!countryData[user.country]) {
-        countryData[user.country] = { totalAge: 0, count: 0 }
+        countryData[user.country] = { totalAge: 0, count: 0 };
       }
-      countryData[user.country].totalAge += age
-      countryData[user.country].count++
-    })
+      countryData[user.country].totalAge += age;
+      countryData[user.country].count++;
+    });
     return Object.entries(countryData).map(([country, data]) => ({ 
       country, 
       averageAge: data.count > 0 ? data.totalAge / data.count : 0,
-    }))
-  }, [filteredData])
+    }));
+  }, [filteredData]);
 
   return (
     <div className="space-y-6 py-6">
@@ -138,5 +120,5 @@ export function UsersOverview() {
         <AverageAgeByCountryChart data={ageByCountry} />
       </div>
     </div>
-  )
+  );
 }
