@@ -88,7 +88,7 @@ export function UsersOverview() {
   return (
     <div className="space-y-6 py-6">
       <div className="pt-4 flex space-x-4">
-        <Select onValueChange={setSelectedGender}>
+        <Select value={selectedGender} onValueChange={setSelectedGender}>
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="Select Gender" />
           </SelectTrigger>
@@ -98,7 +98,7 @@ export function UsersOverview() {
             <SelectItem value="Female">Female</SelectItem>
           </SelectContent>
         </Select>
-        <Select onValueChange={setSelectedDateRange}>
+        <Select value={selectedDateRange} onValueChange={setSelectedDateRange}>
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="Select Date Range" />
           </SelectTrigger>
