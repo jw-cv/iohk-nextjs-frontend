@@ -69,7 +69,7 @@ export function DataTable<TData, TValue>({
         ...column,
         cell: (info: CellContext<TData, TValue>) => {
           if (column.id === "birthDate" && info.getValue()) {
-            return formatDateManually(info.getValue() as Date);
+            return formatDateManually(new Date(info.getValue() as string));
           }
           if (column.id === "gender" && info.getValue()) {
             return (info.getValue() as string).charAt(0).toUpperCase() + (info.getValue() as string).slice(1).toLowerCase();
@@ -86,9 +86,28 @@ export function DataTable<TData, TValue>({
     [columns]
   )
 
+  const globalFilterFn = React.useCallback(
+    (row: any, columnId: string, filterValue: string) => {
+      const value = row.getValue(columnId);
+      if (typeof value === "number") {
+        return value.toString().includes(filterValue);
+      }
+      if (typeof value === "string") {
+        if (columnId === "birthDate") {
+          // Handle both YYYY-MM-DD and MM/DD/YYYY formats
+          const formattedDate = formatDateManually(new Date(value));
+          return formattedDate.includes(filterValue) || value.includes(filterValue);
+        }
+        return value.toLowerCase().includes(filterValue.toLowerCase());
+      }
+      return false;
+    },
+    []
+  );
+
   const table = useReactTable({
     data,
-    columns: formattedColumns, // Use formattedColumns instead of columns
+    columns: formattedColumns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
@@ -98,7 +117,7 @@ export function DataTable<TData, TValue>({
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
     onGlobalFilterChange: setGlobalFilter,
-    globalFilterFn: "includesString",
+    globalFilterFn: globalFilterFn,
     state: {
       sorting,
       columnFilters,
