@@ -1,28 +1,23 @@
 "use client"
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState } from 'react';
+import { useUsers, User } from '@/hooks/useUsers';
 
-type User = {
-  name: string;
-  surname: string;
-  number: string;
-  gender: string;
-  country: string;
-  dependants: number;
-  birthDate: Date; // Change to Date
-};
+type SortingState = { id: string; desc: boolean }[];
+type ColumnFiltersState = { id: string; value: unknown }[];
+type VisibilityState = { [key: string]: boolean };
 
 type UserContextType = {
   data: User[];
   setData: React.Dispatch<React.SetStateAction<User[]>>;
-  sorting: any;
-  setSorting: React.Dispatch<React.SetStateAction<any>>;
-  columnFilters: any;
-  setColumnFilters: React.Dispatch<React.SetStateAction<any>>;
-  columnVisibility: any;
-  setColumnVisibility: React.Dispatch<React.SetStateAction<any>>;
-  rowSelection: any;
-  setRowSelection: React.Dispatch<React.SetStateAction<any>>;
+  sorting: SortingState;
+  setSorting: React.Dispatch<React.SetStateAction<SortingState>>;
+  columnFilters: ColumnFiltersState;
+  setColumnFilters: React.Dispatch<React.SetStateAction<ColumnFiltersState>>;
+  columnVisibility: VisibilityState;
+  setColumnVisibility: React.Dispatch<React.SetStateAction<VisibilityState>>;
+  rowSelection: Record<string, boolean>;
+  setRowSelection: React.Dispatch<React.SetStateAction<Record<string, boolean>>>;
   globalFilter: string;
   setGlobalFilter: React.Dispatch<React.SetStateAction<string>>;
   selectedGender: string | undefined;
@@ -34,10 +29,10 @@ type UserContextType = {
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [data, setData] = useState<User[]>([]);
-  const [sorting, setSorting] = useState<any>([]);
-  const [columnFilters, setColumnFilters] = useState<any>([]);
-  const [columnVisibility, setColumnVisibility] = useState<any>({
+  const { data, setData } = useUsers();
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({
     name: true,
     surname: true,
     number: false,
@@ -47,45 +42,10 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
     birthDate: false,
     actions: true,
   });
-  const [rowSelection, setRowSelection] = useState<any>({});
+  const [rowSelection, setRowSelection] = useState<Record<string, boolean>>({});
   const [globalFilter, setGlobalFilter] = useState<string>('');
   const [selectedGender, setSelectedGender] = useState<string | undefined>();
   const [selectedDateRange, setSelectedDateRange] = useState<string | undefined>();
-
-  useEffect(() => {
-    // Fetch data from GraphQL API
-    const fetchData = async () => {
-      const response = await fetch('http://localhost:8080/graphql', { // Updated URL
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          query: `
-            query {
-              users {
-                name
-                surname
-                number
-                gender
-                country
-                dependants
-                birthDate
-              }
-            }
-          `,
-        }),
-      });
-      const { data } = await response.json();
-      const processedData = data.users.map((user: any) => ({
-        ...user,
-        birthDate: new Date(user.birthDate), // Convert birthDate to Date object
-      }));
-      setData(processedData);
-    };
-
-    fetchData();
-  }, []);
 
   return (
     <UserContext.Provider
