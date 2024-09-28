@@ -88,7 +88,10 @@ export const columns: ColumnDef<User>[] = [
   {
     accessorKey: "gender",
     header: createSortableHeader("Gender", "gender"),
-    cell: ({ row }) => <div>{row.getValue("gender")}</div>,
+    cell: ({ row }) => {
+      const gender = row.getValue("gender") as string;
+      return <div>{gender.charAt(0).toUpperCase() + gender.slice(1).toLowerCase()}</div>;
+    },
   },
   {
     accessorKey: "country",
