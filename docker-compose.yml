@@ -1,0 +1,10 @@
+services:
+  web:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - GRAPHQL_ENDPOINT=http://host.docker.internal:8080/graphql
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
