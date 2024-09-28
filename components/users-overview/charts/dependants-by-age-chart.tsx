@@ -19,8 +19,8 @@ import {
 } from "@/components/ui/chart"
 
 type DependantsByAgeData = {
-  age: number
-  dependants: number
+  age: number;
+  dependants: number;
 }
 
 const chartConfig: ChartConfig = {

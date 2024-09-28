@@ -36,7 +36,7 @@ export function LandingPage() {
         <div className="container mx-auto text-center">
           <h1 className="text-5xl font-bold mb-4 text-foreground">IOHK</h1>
           <p className="text-xl max-w-2xl mx-auto text-muted-foreground">
-            One of the world's pre-eminent blockchain infrastructure research and engineering companies.
+            One of the world&apos;s pre-eminent blockchain infrastructure research and engineering companies.
           </p>
         </div>
       </section>

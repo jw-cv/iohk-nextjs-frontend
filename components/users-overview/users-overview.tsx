@@ -56,7 +56,7 @@ export function UsersOverview() {
 
   const dependantsByAge = useMemo(() => {
     return filteredData.map(user => ({
-      birthDate: user.birthDate,
+      birthDate: user.birthDate.toISOString(), // Convert Date to string
       dependants: user.dependants,
     }));
   }, [filteredData]);

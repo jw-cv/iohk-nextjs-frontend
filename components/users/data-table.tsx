@@ -12,6 +12,7 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
+  CellContext
 } from "@tanstack/react-table"
 import { ChevronDown } from "lucide-react"
 import { formatDateManually } from "@/utils/formatDate" // Import the manual formatting function
@@ -42,8 +43,8 @@ interface DataTableProps<TData, TValue> {
   setColumnFilters: React.Dispatch<React.SetStateAction<ColumnFiltersState>>
   columnVisibility: VisibilityState
   setColumnVisibility: React.Dispatch<React.SetStateAction<VisibilityState>>
-  rowSelection: any
-  setRowSelection: React.Dispatch<React.SetStateAction<any>>
+  rowSelection: Record<string, boolean>
+  setRowSelection: React.Dispatch<React.SetStateAction<Record<string, boolean>>>
   globalFilter: string
   setGlobalFilter: React.Dispatch<React.SetStateAction<string>>
 }
@@ -66,11 +67,17 @@ export function DataTable<TData, TValue>({
     () =>
       columns.map((column) => ({
         ...column,
-        cell: (info: any) => {
+        cell: (info: CellContext<TData, TValue>) => {
           if (column.id === "birthDate" && info.getValue()) {
-            return formatDateManually(info.getValue());
+            return formatDateManually(info.getValue() as Date);
           }
-          return column.cell ? column.cell(info) : info.getValue();
+          if (typeof column.cell === 'function') {
+            return column.cell(info);
+          }
+          if (column.cell) {
+            return column.cell;
+          }
+          return info.getValue();
         },
       })),
     [columns]

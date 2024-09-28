@@ -12,19 +12,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { formatDateManually } from "@/utils/formatDate" // Import the manual formatting function
-
-export type User = {
-  name: string
-  surname: string
-  number: string
-  gender: string
-  country: string
-  dependants: number
-  birthDate: Date
-}
+import { User } from '@/hooks/useUsers';
 
 const createSortableHeader = (header: string, accessorKey: string, isDateColumn = false) => {
-  return ({ column }: { column: any }) => {
+  const SortableHeader = ({ column }: { column: { getIsSorted: () => boolean | "asc" | "desc"; toggleSorting: (descending?: boolean) => void } }) => {
     return (
       <Button
         variant="ghost"
@@ -51,6 +42,8 @@ const createSortableHeader = (header: string, accessorKey: string, isDateColumn 
       </Button>
     )
   }
+  SortableHeader.displayName = `SortableHeader_${header}`;
+  return SortableHeader;
 }
 
 const sortBirthDate = (a: Date, b: Date) => {
