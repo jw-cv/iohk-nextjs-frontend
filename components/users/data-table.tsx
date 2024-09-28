@@ -71,6 +71,9 @@ export function DataTable<TData, TValue>({
           if (column.id === "birthDate" && info.getValue()) {
             return formatDateManually(info.getValue() as Date);
           }
+          if (column.id === "gender" && info.getValue()) {
+            return (info.getValue() as string).charAt(0).toUpperCase() + (info.getValue() as string).slice(1).toLowerCase();
+          }
           if (typeof column.cell === 'function') {
             return column.cell(info);
           }

@@ -14,9 +14,9 @@ export function UsersOverview() {
 
   const filteredData = useMemo(() => {
     return data.filter(user => {
-      const genderMatch = !selectedGender || selectedGender === 'all' || user.gender === selectedGender;
+      const genderMatch = !selectedGender || selectedGender === 'all' || user.gender === selectedGender.toUpperCase();
       let dateMatch = true;
-      const birthDate = new Date(user.birthDate); // Convert string to Date here
+      const birthDate = new Date(user.birthDate);
       const birthYear = birthDate.getFullYear();
 
       if (selectedDateRange === 'since-2000') {
@@ -94,8 +94,8 @@ export function UsersOverview() {
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All Genders</SelectItem>
-            <SelectItem value="Male">Male</SelectItem>
-            <SelectItem value="Female">Female</SelectItem>
+            <SelectItem value="MALE">Male</SelectItem>
+            <SelectItem value="FEMALE">Female</SelectItem>
           </SelectContent>
         </Select>
         <Select value={selectedDateRange} onValueChange={setSelectedDateRange}>
