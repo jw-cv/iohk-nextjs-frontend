@@ -12,7 +12,8 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-  CellContext
+  CellContext,
+  Row // Add this
 } from "@tanstack/react-table"
 import { ChevronDown } from "lucide-react"
 import { formatDateManually } from "@/utils/formatDate" // Import the manual formatting function
@@ -34,6 +35,9 @@ import {
   TableRow,
 } from "@/components/ui/table"
 
+import { Customer } from '@/models/Customer';
+import { FilterFn } from "@tanstack/react-table"; // Add this import
+
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
@@ -49,7 +53,7 @@ interface DataTableProps<TData, TValue> {
   setGlobalFilter: React.Dispatch<React.SetStateAction<string>>
 }
 
-export function DataTable<TData, TValue>({
+export function DataTable<TData extends Customer, TValue>({
   columns,
   data,
   sorting,
@@ -86,8 +90,8 @@ export function DataTable<TData, TValue>({
     [columns]
   )
 
-  const globalFilterFn = React.useCallback(
-    (row: any, columnId: string, filterValue: string) => {
+  const globalFilterFn: FilterFn<TData> = React.useCallback(
+    (row, columnId, filterValue) => {
       const value = row.getValue(columnId);
       if (typeof value === "number") {
         return value.toString().includes(filterValue);

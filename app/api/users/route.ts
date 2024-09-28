@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { Customer } from '@/models/Customer';
 
 export const dynamic = 'force-dynamic';
 
@@ -42,7 +43,7 @@ export async function GET() {
       throw new Error('Unexpected data structure in the API response');
     }
 
-    const processedData = data.customers.map((customer: any) => ({
+    const processedData = data.customers.map((customer: Customer) => ({
       ...customer,
       birthDate: customer.birthDate, // Keep birthDate as a string
       number: Number(customer.number),

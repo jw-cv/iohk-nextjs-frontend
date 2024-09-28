@@ -11,8 +11,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { formatDateManually } from "@/utils/formatDate" // Import the manual formatting function
-import { User } from '@/hooks/useUsers';
+import { formatDateManually } from "@/utils/formatDate"
+import { Customer } from '@/models/Customer'
 
 const createSortableHeader = (header: string, accessorKey: string, isDateColumn = false) => {
   const SortableHeader = ({ column }: { column: { getIsSorted: () => boolean | "asc" | "desc"; toggleSorting: (descending?: boolean) => void } }) => {
@@ -46,11 +46,7 @@ const createSortableHeader = (header: string, accessorKey: string, isDateColumn 
   return SortableHeader;
 }
 
-const sortBirthDate = (a: Date, b: Date) => {
-  return b.getTime() - a.getTime(); // Reverse order for most recent first
-}
-
-export const columns: ColumnDef<User>[] = [
+export const columns: ColumnDef<Customer>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -105,14 +101,14 @@ export const columns: ColumnDef<User>[] = [
   },
   {
     accessorKey: "birthDate",
-    header: createSortableHeader("Birth Date", "birthDate"),
+    header: createSortableHeader("Birth Date", "birthDate", true),
     cell: ({ row }) => formatDateManually(new Date(row.getValue("birthDate"))),
   },
   {
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const user = row.original
+      const customer = row.original
 
       return (
         <DropdownMenu>
@@ -125,14 +121,14 @@ export const columns: ColumnDef<User>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(user.number.toString())}
+              onClick={() => navigator.clipboard.writeText(customer.number.toString())}
             >
-              Copy user number
+              Copy customer number
             </DropdownMenuItem>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(formatDateManually(new Date(user.birthDate)))}
+              onClick={() => navigator.clipboard.writeText(formatDateManually(new Date(customer.birthDate)))}
             >
-              Copy user birth date
+              Copy customer birth date
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
