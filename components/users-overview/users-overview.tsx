@@ -16,7 +16,7 @@ export function UsersOverview() {
     return data.filter(user => {
       const genderMatch = !selectedGender || selectedGender === 'all' || user.gender === selectedGender;
       let dateMatch = true;
-      const birthDate = new Date(user.birthDate);
+      const birthDate = new Date(user.birthDate); // Convert string to Date here
       const birthYear = birthDate.getFullYear();
 
       if (selectedDateRange === 'since-2000') {
@@ -56,7 +56,7 @@ export function UsersOverview() {
 
   const dependantsByAge = useMemo(() => {
     return filteredData.map(user => ({
-      birthDate: user.birthDate.toISOString(), // Convert Date to string
+      birthDate: user.birthDate, // Keep birthDate as a string
       dependants: user.dependants,
     }));
   }, [filteredData]);

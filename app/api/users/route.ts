@@ -1,9 +1,8 @@
 import { NextResponse } from 'next/server';
-import { User } from '@/hooks/useUsers';
 
 export const dynamic = 'force-dynamic';
 
-const GRAPHQL_ENDPOINT = process.env.GRAPHQL_ENDPOINT || 'http://localhost:8080/graphql';
+const GRAPHQL_ENDPOINT = process.env.GRAPHQL_ENDPOINT || 'http://localhost:8080/query';
 
 export async function GET() {
   try {
@@ -14,8 +13,9 @@ export async function GET() {
       },
       body: JSON.stringify({
         query: `
-          query {
-            users {
+          query GetAllCustomers {
+            customers {
+              id
               name
               surname
               number
@@ -30,20 +30,31 @@ export async function GET() {
     });
 
     if (!response.ok) {
-      throw new Error(`Failed to fetch data from GraphQL API. HTTP error! status: ${response.status}`);
+      const errorText = await response.text();
+      console.error('Error response:', errorText);
+      throw new Error(`Failed to fetch data from GraphQL API. HTTP error! status: ${response.status}, body: ${errorText}`);
     }
 
     const { data } = await response.json();
-    const processedData: User[] = data.users.map((user: User) => ({
-      ...user,
-      birthDate: new Date(user.birthDate),
+    
+    if (!data || !data.customers) {
+      console.error('Unexpected data structure:', data);
+      throw new Error('Unexpected data structure in the API response');
+    }
+
+    const processedData = data.customers.map((customer: any) => ({
+      ...customer,
+      birthDate: customer.birthDate, // Keep birthDate as a string
+      number: Number(customer.number),
+      dependants: Number(customer.dependants),
+      gender: customer.gender.toUpperCase(), // Ensure gender is uppercase to match the enum
     }));
 
     return NextResponse.json(processedData);
   } catch (error) {
-    console.error('Error fetching users:', error);
+    console.error('Error fetching customers:', error);
     return NextResponse.json(
-      { error: 'Failed to fetch users', details: error instanceof Error ? error.message : 'Unknown error' },
+      { error: 'Failed to fetch customers', details: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }
     );
   }

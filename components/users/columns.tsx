@@ -102,13 +102,8 @@ export const columns: ColumnDef<User>[] = [
   },
   {
     accessorKey: "birthDate",
-    header: createSortableHeader("Birth Date", "birthDate", true),
-    cell: ({ row }) => <div>{formatDateManually(row.getValue("birthDate"))}</div>, // Format the Date object
-    sortingFn: (rowA, rowB, columnId) => {
-      const a = rowA.getValue(columnId) as Date;
-      const b = rowB.getValue(columnId) as Date;
-      return sortBirthDate(a, b);
-    },
+    header: createSortableHeader("Birth Date", "birthDate"),
+    cell: ({ row }) => formatDateManually(new Date(row.getValue("birthDate"))),
   },
   {
     id: "actions",

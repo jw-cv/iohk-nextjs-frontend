@@ -8,7 +8,7 @@ export type User = {
   gender: string;
   country: string;
   dependants: number;
-  birthDate: Date;
+  birthDate: string; // Change this to string
 };
 
 export function useUsers() {
