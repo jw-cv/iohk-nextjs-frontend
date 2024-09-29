@@ -1,12 +1,24 @@
-import { useUserContext } from '@/components/users/user-context';
-import { columns } from './columns';
-import { DataTable } from './data-table';
+import { DataTable } from "@/components/users/data-table"
+import { columns } from "@/components/users/columns"
+import { useUserContext } from "@/components/users/user-context"
 
 export function Users() {
-  const { data, sorting, setSorting, columnFilters, setColumnFilters, columnVisibility, setColumnVisibility, rowSelection, setRowSelection, globalFilter, setGlobalFilter } = useUserContext();
+  const { 
+    data, 
+    sorting, 
+    setSorting, 
+    columnFilters, 
+    setColumnFilters, 
+    columnVisibility, 
+    setColumnVisibility, 
+    rowSelection, 
+    setRowSelection, 
+    globalFilter, 
+    setGlobalFilter 
+  } = useUserContext()
 
   return (
-    <div className="container mx-auto py-6">
+    <div className="container mx-auto py-10">
       <DataTable
         columns={columns}
         data={data}
@@ -22,5 +34,5 @@ export function Users() {
         setGlobalFilter={setGlobalFilter}
       />
     </div>
-  );
+  )
 }

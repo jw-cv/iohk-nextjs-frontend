@@ -3,10 +3,11 @@ import { Customer } from '@/models/Customer';
 
 export const dynamic = 'force-dynamic';
 
-const GRAPHQL_ENDPOINT = process.env.GRAPHQL_ENDPOINT || 'http://localhost:8080/query';
+const GRAPHQL_ENDPOINT = process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT || 'http://localhost:8080/query';
 
 export async function GET() {
   try {
+    console.log('Fetching data from:', GRAPHQL_ENDPOINT);
     const response = await fetch(GRAPHQL_ENDPOINT, {
       method: 'POST',
       headers: {
@@ -30,13 +31,19 @@ export async function GET() {
       }),
     });
 
+    console.log('Response status:', response.status);
+    console.log('Response headers:', response.headers);
+
     if (!response.ok) {
       const errorText = await response.text();
       console.error('Error response:', errorText);
       throw new Error(`Failed to fetch data from GraphQL API. HTTP error! status: ${response.status}, body: ${errorText}`);
     }
 
-    const { data } = await response.json();
+    const responseText = await response.text();
+    console.log('Response text:', responseText);
+
+    const { data } = JSON.parse(responseText);
     
     if (!data || !data.customers) {
       console.error('Unexpected data structure:', data);

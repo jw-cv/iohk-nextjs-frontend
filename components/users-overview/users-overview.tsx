@@ -10,23 +10,19 @@ import { AverageAgeByCountryChart } from '@/components/users-overview/charts/ave
 import { useUserContext } from '../users/user-context';
 
 export function UsersOverview() {
-  const { data, selectedGender, setSelectedGender, selectedDateRange, setSelectedDateRange } = useUserContext();
+  const { data, selectedGender, setSelectedGender, selectedDateRange, setDateRange } = useUserContext();
 
   const filteredData = useMemo(() => {
     return data.filter(user => {
       const genderMatch = !selectedGender || selectedGender === 'all' || user.gender === selectedGender.toUpperCase();
       let dateMatch = true;
       const birthDate = new Date(user.birthDate);
-      const birthYear = birthDate.getFullYear();
 
-      if (selectedDateRange === 'since-2000') {
-        dateMatch = birthYear >= 2000;
-      } else if (selectedDateRange === '1990-1999') {
-        dateMatch = birthYear >= 1990 && birthYear < 2000;
-      } else if (selectedDateRange === '1980-1989') {
-        dateMatch = birthYear >= 1980 && birthYear < 1990;
-      } else if (selectedDateRange === 'before-1980') {
-        dateMatch = birthYear < 1980;
+      if (selectedDateRange.start) {
+        dateMatch = dateMatch && birthDate >= selectedDateRange.start;
+      }
+      if (selectedDateRange.end) {
+        dateMatch = dateMatch && birthDate <= selectedDateRange.end;
       }
 
       return genderMatch && dateMatch;
@@ -88,7 +84,7 @@ export function UsersOverview() {
   return (
     <div className="space-y-6 py-6">
       <div className="pt-4 flex space-x-4">
-        <Select value={selectedGender} onValueChange={setSelectedGender}>
+        <Select value={selectedGender || undefined} onValueChange={setSelectedGender}>
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="Select Gender" />
           </SelectTrigger>
@@ -98,7 +94,18 @@ export function UsersOverview() {
             <SelectItem value="FEMALE">Female</SelectItem>
           </SelectContent>
         </Select>
-        <Select value={selectedDateRange} onValueChange={setSelectedDateRange}>
+        <Select 
+          value={
+            selectedDateRange.start && selectedDateRange.end 
+              ? `${selectedDateRange.start.getFullYear()}-${selectedDateRange.end.getFullYear()}` 
+              : selectedDateRange.start 
+                ? `since-${selectedDateRange.start.getFullYear()}` 
+                : selectedDateRange.end 
+                  ? `before-${selectedDateRange.end.getFullYear() + 1}` 
+                  : 'all'
+          } 
+          onValueChange={setDateRange}
+        >
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="Select Date Range" />
           </SelectTrigger>

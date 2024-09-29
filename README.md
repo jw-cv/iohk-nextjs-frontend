@@ -106,7 +106,7 @@ Here are some useful commands:
 The application uses environment variables for configuration. These should be set in a `.env.local` file. An important variable is:
 
 ```
-GRAPHQL_ENDPOINT=http://localhost:8080/graphql
+GRAPHQL_ENDPOINT=http://localhost:8080/query
 ```
 
 ## API Integration
@@ -181,3 +181,26 @@ This project is licensed under the MIT License - see the [LICENSE](https://opens
 ## Contact Information
 
 For support or questions, please feel free to contact me at [joshwillems.cv@gmail.com](mailto:joshwillems.cv@gmail.com).
+
+# Project Setup
+
+## Environment Variables
+
+The project uses different environment files for local development and production:
+
+- `.env.local`: Used for local development (committed to the repository)
+- `.env.production`: Used for production Docker setup (committed to the repository)
+
+To set up your environment:
+
+1. For local development (running with `npm run dev`), use `.env.local`:
+   ```
+   NEXT_PUBLIC_GRAPHQL_ENDPOINT=http://localhost:8080/query
+   ```
+
+2. For Docker environments (including production), use `.env.production`:
+   ```
+   NEXT_PUBLIC_GRAPHQL_ENDPOINT=http://host.docker.internal:8080/query
+   ```
+
+The application will automatically use the appropriate environment file based on the context (local development or Docker).

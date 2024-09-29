@@ -1,15 +1,13 @@
 "use client"
 
-import React, { createContext, useContext, useState } from 'react';
-import { useUsers, User } from '@/hooks/useUsers';
+import React, { createContext, useContext, ReactNode } from 'react';
+import { useUsers } from '@/hooks/useUsers';
+import { SortingState, ColumnFiltersState, VisibilityState } from "@tanstack/react-table";
+import { Customer } from '@/models/Customer'; // Import Customer instead of User
 
-type SortingState = { id: string; desc: boolean }[];
-type ColumnFiltersState = { id: string; value: unknown }[];
-type VisibilityState = { [key: string]: boolean };
-
-type UserContextType = {
-  data: User[];
-  setData: React.Dispatch<React.SetStateAction<User[]>>;
+interface UserContextType {
+  data: Customer[]; // Change this to Customer[]
+  setData: React.Dispatch<React.SetStateAction<Customer[]>>; // Change this to Customer[]
   sorting: SortingState;
   setSorting: React.Dispatch<React.SetStateAction<SortingState>>;
   columnFilters: ColumnFiltersState;
@@ -20,32 +18,34 @@ type UserContextType = {
   setRowSelection: React.Dispatch<React.SetStateAction<Record<string, boolean>>>;
   globalFilter: string;
   setGlobalFilter: React.Dispatch<React.SetStateAction<string>>;
+  // Add these new properties
   selectedGender: string | undefined;
   setSelectedGender: React.Dispatch<React.SetStateAction<string | undefined>>;
-  selectedDateRange: string | undefined;
-  setSelectedDateRange: React.Dispatch<React.SetStateAction<string | undefined>>;
-};
+  selectedDateRange: { start: Date | null; end: Date | null };
+  setDateRange: (value: string) => void;
+}
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
-export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const { data, setData } = useUsers();
-  const [sorting, setSorting] = useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({
-    name: true,
-    surname: true,
-    number: false,
-    gender: false,
-    country: false,
-    dependants: false,
-    birthDate: false,
-    actions: true,
-  });
-  const [rowSelection, setRowSelection] = useState<Record<string, boolean>>({});
-  const [globalFilter, setGlobalFilter] = useState<string>('');
-  const [selectedGender, setSelectedGender] = useState<string | undefined>();
-  const [selectedDateRange, setSelectedDateRange] = useState<string | undefined>();
+export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const {
+    data,
+    setData,
+    sorting,
+    setSorting,
+    columnFilters,
+    setColumnFilters,
+    columnVisibility,
+    setColumnVisibility,
+    rowSelection,
+    setRowSelection,
+    globalFilter,
+    setGlobalFilter,
+    selectedGender,
+    setSelectedGender,
+    selectedDateRange,
+    setDateRange
+  } = useUsers();
 
   return (
     <UserContext.Provider
@@ -65,7 +65,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
         selectedGender,
         setSelectedGender,
         selectedDateRange,
-        setSelectedDateRange,
+        setDateRange
       }}
     >
       {children}

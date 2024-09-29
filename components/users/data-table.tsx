@@ -13,7 +13,7 @@ import {
   getSortedRowModel,
   useReactTable,
   CellContext,
-  Row // Add this
+  FilterFn // Add this instead of Row
 } from "@tanstack/react-table"
 import { ChevronDown } from "lucide-react"
 import { formatDateManually } from "@/utils/formatDate" // Import the manual formatting function
@@ -36,7 +36,6 @@ import {
 } from "@/components/ui/table"
 
 import { Customer } from '@/models/Customer';
-import { FilterFn } from "@tanstack/react-table"; // Add this import
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
