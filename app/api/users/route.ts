@@ -1,5 +1,4 @@
 import { NextResponse } from 'next/server';
-import { Customer } from '@/models/Customer';
 
 export const dynamic = 'force-dynamic';
 
@@ -31,34 +30,17 @@ export async function GET() {
       }),
     });
 
-    console.log('Response status:', response.status);
-    console.log('Response headers:', response.headers);
-
     if (!response.ok) {
-      const errorText = await response.text();
-      console.error('Error response:', errorText);
-      throw new Error(`Failed to fetch data from GraphQL API. HTTP error! status: ${response.status}, body: ${errorText}`);
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    const responseText = await response.text();
-    console.log('Response text:', responseText);
-
-    const { data } = JSON.parse(responseText);
+    const { data } = await response.json();
     
     if (!data || !data.customers) {
-      console.error('Unexpected data structure:', data);
       throw new Error('Unexpected data structure in the API response');
     }
 
-    const processedData = data.customers.map((customer: Customer) => ({
-      ...customer,
-      birthDate: customer.birthDate, // Keep birthDate as a string
-      number: Number(customer.number),
-      dependants: Number(customer.dependants),
-      gender: customer.gender.toUpperCase(), // Ensure gender is uppercase to match the enum
-    }));
-
-    return NextResponse.json(processedData);
+    return NextResponse.json(data.customers);
   } catch (error) {
     console.error('Error fetching customers:', error);
     return NextResponse.json(
