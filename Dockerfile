@@ -19,5 +19,8 @@ RUN npm run build
 # Make port 3000 available to the world outside this container
 EXPOSE 3000
 
+# Set NODE_ENV to production
+ENV NODE_ENV=production
+
 # Run the app when the container launches
 CMD ["npm", "start"]

@@ -4,8 +4,9 @@ services:
     ports:
       - "3000:3000"
     environment:
+      - NODE_ENV=production
       - NEXT_PUBLIC_GRAPHQL_ENDPOINT=${NEXT_PUBLIC_GRAPHQL_ENDPOINT:-http://host.docker.internal:8080/query}
     env_file:
-      - .env.local
+      - .env.production
     extra_hosts:
       - "host.docker.internal:host-gateway"
