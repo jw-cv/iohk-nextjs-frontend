@@ -14,7 +14,7 @@ export function UsersOverview() {
 
   const filteredData = useMemo(() => {
     return data.filter(user => {
-      const genderMatch = !selectedGender || selectedGender === 'all' || user.gender === selectedGender.toUpperCase();
+      const genderMatch = !selectedGender || selectedGender === 'all' || user.gender.toLowerCase() === selectedGender.toLowerCase();
       let dateMatch = true;
       const birthDate = new Date(user.birthDate);
 
@@ -60,9 +60,13 @@ export function UsersOverview() {
   const usersByGender = useMemo(() => {
     const genderData: { [key: string]: number } = {};
     filteredData.forEach(user => {
-      genderData[user.gender] = (genderData[user.gender] || 0) + 1;
+      const gender = user.gender.toLowerCase();
+      genderData[gender] = (genderData[gender] || 0) + 1;
     });
-    return Object.entries(genderData).map(([gender, count]) => ({ gender, count }));
+    return Object.entries(genderData).map(([gender, count]) => ({ 
+      gender: gender === 'male' ? 'Male' : 'Female', 
+      count 
+    }));
   }, [filteredData]);
 
   const ageByCountry = useMemo(() => {
@@ -90,8 +94,8 @@ export function UsersOverview() {
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All Genders</SelectItem>
-            <SelectItem value="MALE">Male</SelectItem>
-            <SelectItem value="FEMALE">Female</SelectItem>
+            <SelectItem value="male">Male</SelectItem>
+            <SelectItem value="female">Female</SelectItem>
           </SelectContent>
         </Select>
         <Select 

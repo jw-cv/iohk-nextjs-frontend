@@ -39,8 +39,8 @@ const chartConfig: ChartConfig = {
 export function UsersByGenderChart({ data }: { data: UsersByGenderData[] }) {
   const hasData = data.length > 0
   const totalUsers = data.reduce((sum, item) => sum + item.count, 0)
-  const maleCount = data.find(item => item.gender === 'MALE')?.count || 0
-  const femaleCount = data.find(item => item.gender === 'FEMALE')?.count || 0
+  const maleCount = data.find(item => item.gender.toLowerCase() === 'male')?.count || 0
+  const femaleCount = data.find(item => item.gender.toLowerCase() === 'female')?.count || 0
 
   const chartData = [
     { gender: "Male", count: maleCount, fill: "var(--color-male)" },

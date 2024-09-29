@@ -75,7 +75,8 @@ export function DataTable<TData extends Customer, TValue>({
             return formatDateManually(new Date(info.getValue() as string));
           }
           if (column.id === "gender" && info.getValue()) {
-            return (info.getValue() as string).charAt(0).toUpperCase() + (info.getValue() as string).slice(1).toLowerCase();
+            // Always display "Male" or "Female"
+            return (info.getValue() as string).toLowerCase() === 'male' ? 'Male' : 'Female';
           }
           if (typeof column.cell === 'function') {
             return column.cell(info);
@@ -100,6 +101,10 @@ export function DataTable<TData extends Customer, TValue>({
           // Handle both YYYY-MM-DD and MM/DD/YYYY formats
           const formattedDate = formatDateManually(new Date(value));
           return formattedDate.includes(filterValue) || value.includes(filterValue);
+        }
+        if (columnId === "gender") {
+          // Case-insensitive comparison for gender
+          return value.toLowerCase().includes(filterValue.toLowerCase());
         }
         return value.toLowerCase().includes(filterValue.toLowerCase());
       }

@@ -86,7 +86,7 @@ export const columns: ColumnDef<Customer>[] = [
     header: createSortableHeader("Gender", "gender"),
     cell: ({ row }) => {
       const gender = row.getValue("gender") as string;
-      return <div>{gender.charAt(0).toUpperCase() + gender.slice(1).toLowerCase()}</div>;
+      return <div>{gender.toLowerCase() === 'male' ? 'Male' : 'Female'}</div>;
     },
   },
   {
