@@ -48,13 +48,19 @@ logs:
 	@$(DOCKER_COMPOSE_CMD) logs -f
 
 test:
+	@echo "Installing dependencies..."
+	@npm install
 	@echo "Running tests..."
 	@npm test
 
 test-watch:
+	@echo "Installing dependencies..."
+	@npm install
 	@echo "Running tests in watch mode..."
 	@npm run test:watch
 
 test-coverage:
+	@echo "Installing dependencies..."
+	@npm install
 	@echo "Running tests with coverage..."
 	@npm run test:coverage

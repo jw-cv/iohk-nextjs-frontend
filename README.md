@@ -52,6 +52,11 @@ Before you begin, please ensure you have the following installed:
    cd iohk-nextjs-frontend
    ```
 
+2. Installs dependencies:
+   ```
+   npm install
+   ```
+
 ## Running Locally
 
 To run the application locally using Docker:
