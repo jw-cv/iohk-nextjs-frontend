@@ -43,8 +43,8 @@ export function LandingPage() {
       <main className="flex-grow container mx-auto px-4">
         <Tabs defaultValue="users" className="w-full mt-8">
           <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="users">Users</TabsTrigger>
-            <TabsTrigger value="overview">Users Overview</TabsTrigger>
+            <TabsTrigger value="users" data-testid="users-tab">Users</TabsTrigger>
+            <TabsTrigger value="overview" data-testid="users-overview-tab">Users Overview</TabsTrigger>
           </TabsList>
           <TabsContent value="users" className="mt-4">
             <Card>

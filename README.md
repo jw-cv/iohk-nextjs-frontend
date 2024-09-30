@@ -31,14 +31,12 @@ This project is a Next.js 14 frontend application that serves as the user interf
 
 ## Prerequisites
 
-Before you begin, ensure you have the following installed:
+Before you begin, please ensure you have the following installed:
 - [Node.js](https://nodejs.org/) (tested on 22.9.0)
 - [npm](https://www.npmjs.com/) (tested on 10.8.3)
 - [Docker](https://docs.docker.com/get-docker/) (tested on 27.3.1)
 - [Docker Compose](https://docs.docker.com/compose/install/) (tested on 2.29.7)
-  - Old syntax (v1) of Docker use: `docker-compose`.
-  - New syntax (v2 and later) use: `docker compose`.
-  - Please make use of the `make` commands to build and run the project as this takes care of this for you (but it is something to be aware of if you run into any issues).
+  - Please make use of the `make` commands to build and run the project as this takes care of the variance in docker compose commands between (v1) `docker-compose` and (v2 and later) `docker compose`, as well as simplifying the process.
   - Run `make help` to see the list of available commands.
 - [Make](https://www.gnu.org/software/make/) (tested on 4.3, but should work on any version above 3.81)
   - macOS: Included with Xcode Command Line Tools or alternatively via Homebrew with `brew install make`
