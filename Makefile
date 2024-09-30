@@ -16,15 +16,18 @@ endif
 DOCKER_COMPOSE_FILE := docker-compose.yml
 DOCKER_COMPOSE_CMD := $(DOCKER_COMPOSE) -f $(DOCKER_COMPOSE_FILE)
 
-.PHONY: help build run stop logs
+.PHONY: help build run stop logs test test-watch test-coverage
 
 help:
 	@echo "Available commands:"
-	@echo "  make build  - Build the Docker image"
-	@echo "  make run    - Run the Docker container and show logs"
-	@echo "  make stop   - Stop the Docker container"
-	@echo "  make logs   - Show Docker logs"
-	@echo "  make help   - Show this help message"
+	@echo "  make build         - Build the Docker image"
+	@echo "  make run           - Run the Docker container and show logs"
+	@echo "  make stop          - Stop the Docker container"
+	@echo "  make logs          - Show Docker logs"
+	@echo "  make test          - Run tests"
+	@echo "  make test-watch    - Run tests in watch mode"
+	@echo "  make test-coverage - Run tests with coverage"
+	@echo "  make help          - Show this help message"
 
 build:
 	@echo "Building Docker images..."
@@ -43,3 +46,15 @@ stop:
 logs:
 	@echo "Showing Docker logs..."
 	@$(DOCKER_COMPOSE_CMD) logs -f
+
+test:
+	@echo "Running tests..."
+	@npm test
+
+test-watch:
+	@echo "Running tests in watch mode..."
+	@npm run test:watch
+
+test-coverage:
+	@echo "Running tests with coverage..."
+	@npm run test:coverage
