@@ -255,6 +255,12 @@ To run the test suite:
 npm test
 ```
 
+To run the test suite in watch mode:
+
+```
+npm run test:watch
+```
+
 To run tests with coverage:
 
 ```
