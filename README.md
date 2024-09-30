@@ -124,6 +124,24 @@ Here are some useful commands:
   make logs
   ```
 
+- To run the test suite:
+
+  ```
+  npm test
+  ```
+
+- To run the test suite in watch mode:
+
+  ```
+  npm run test:watch
+  ```
+
+-  To run tests with coverage:
+
+  ```
+  npm run test:coverage
+  ```
+
 ## Configuration
 
 The application uses environment variables for configuration. These are set in a `.env.local` file. An important variable is:
