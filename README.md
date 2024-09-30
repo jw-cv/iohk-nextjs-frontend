@@ -1,28 +1,33 @@
-# IOHK Frontend UI (Pre-production)
+# IOHK Frontend UI
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Table of Contents
 1. [Introduction](#introduction)
-2. [Prerequisites](#prerequisites)
-3. [Installation](#installation)
-4. [Running Locally](#running-locally)
-5. [Usage](#usage)
-6. [Configuration](#configuration)
-7. [API Integration](#api-integration)
-8. [Components](#components)
-9. [Styling](#styling)
-10. [Testing](#testing)
-11. [Troubleshooting](#troubleshooting)
-12. [Core Concepts](#core-concepts)
-13. [Contributing](#contributing)
-14. [Future Work](#future-work)
-15. [License](#license)
-16. [Contact Information](#contact-information)
+2. [Architecture Diagram](#architecture-diagram)
+3. [Prerequisites](#prerequisites)
+4. [Installation](#installation)
+5. [Running Locally](#running-locally)
+6. [Usage](#usage)
+7. [Configuration](#configuration)
+8. [API Integration](#api-integration)
+9. [Components](#components)
+10. [Styling](#styling)
+11. [Testing](#testing)
+12. [Troubleshooting](#troubleshooting)
+13. [Core Concepts](#core-concepts)
+14. [Contributing](#contributing)
+15. [Future Work](#future-work)
+16. [License](#license)
+17. [Contact Information](#contact-information)
 
 ## Introduction
 
 This project is a Next.js 14 frontend application that serves as the user interface for the IOHK backend API. It utilizes the App Router, React, and TypeScript to create a modern, responsive web application for managing and visualizing user data.
+
+## Architecture Diagram
+
+![Architecture Diagram](diagrams/iohk-frontend-architectural-diagram.png)
 
 ## Prerequisites
 
