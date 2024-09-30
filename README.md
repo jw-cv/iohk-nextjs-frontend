@@ -1,7 +1,5 @@
 # IOHK Next.js Frontend
 
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
-
 ## Table of Contents
 1. [Introduction](#introduction)
 2. [Architecture Diagram](#architecture-diagram)
