@@ -44,7 +44,7 @@ Before you begin, ensure you have the following installed:
   - macOS: Included with Xcode Command Line Tools or alternatively via Homebrew with `brew install make`
   - Linux: Use your distribution's package manager (e.g., `sudo apt install make` for Ubuntu)
   - Windows: Install via [Chocolatey](https://chocolatey.org/install) with `choco install make`
-- `git clone https://github.com/jw-cv/iohk-golang-backend` the corresponding backend application and run it locally in a docker container (see README.md in that repository for more information).
+- `git clone https://github.com/jw-cv/iohk-golang-backend` the corresponding [backend application](git clone https://github.com/jw-cv/iohk-golang-backend) and run it locally in a docker container (see README.md in that repository for more information).
 
 ## Installation
 
