@@ -44,6 +44,7 @@ Before you begin, ensure you have the following installed:
   - macOS: Included with Xcode Command Line Tools or alternatively via Homebrew with `brew install make`
   - Linux: Use your distribution's package manager (e.g., `sudo apt install make` for Ubuntu)
   - Windows: Install via [Chocolatey](https://chocolatey.org/install) with `choco install make`
+- `git clone https://github.com/jw-cv/iohk-golang-backend` the corresponding backend application and run it locally in a docker container (see README.md in that repository for more information).
 
 ## Installation
 
@@ -85,6 +86,7 @@ Note: The application uses the `.env.local` file for configuration by default. I
 
 ## Suggestion for Running the Application
 
+- Once you have cloned and run the required Golang backend application: [https://github.com/jw-cv/iohk-golang-backend](https://github.com/jw-cv/iohk-golang-backend):
 - Access the GraphQL Playground at [http://localhost:8080/](http://localhost:8080/) to create some data and interact with it via the frontend application at [http://localhost:3000](http://localhost:3000).
 
 - Copy some example queries and mutations in the [GraphQL Playground](#graphql-playground) section to paste into the GraphQL Playground to get you started.
