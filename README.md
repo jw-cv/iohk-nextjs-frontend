@@ -10,11 +10,11 @@
 7. [Usage](#usage)
 8. [Configuration](#configuration)
 9. [API Integration](#api-integration)
-10. [GraphQL Playground](#graphql-playground)
-11. [Core Concepts](#core-concepts)
-12. [Components](#components)
-13. [Styling](#styling)
-14. [Testing](#testing)
+10. [Testing](#testing)
+11. [GraphQL Playground](#graphql-playground)
+12. [Core Concepts](#core-concepts)
+13. [Components](#components)
+14. [Styling](#styling)
 15. [Troubleshooting](#troubleshooting)
 16. [Environment Variables](#environment-variables)
 17. [Contributing](#contributing)
@@ -127,19 +127,19 @@ Here are some useful commands:
 - To run the test suite:
 
   ```
-  npm test
+  make test
   ```
 
 - To run the test suite in watch mode:
 
   ```
-  npm run test:watch
+  make test-watch
   ```
 
--  To run tests with coverage:
+- To run tests with coverage:
 
   ```
-  npm run test:coverage
+  make test-coverage
   ```
 
 ## Configuration
@@ -155,6 +155,26 @@ None of this needs to be configured or changed when running the application loca
 ## API Integration
 
 This frontend application integrates with the [Golang backend application](https://github.com/jw-cv/iohk-golang-backend). The API calls are made using the `fetch` function in the `app/api/users/route.ts` file. GraphQL queries are used to fetch user data.
+
+## Testing
+
+To run the test suite:
+
+```
+make test
+```
+
+To run the test suite in watch mode:
+
+```
+make test-watch
+```
+
+To run tests with coverage:
+
+```
+make test-coverage
+```
 
 ## GraphQL Playground
 
@@ -268,25 +288,6 @@ Key components include:
 
 The application uses Tailwind CSS and Shadcn UI for styling. Global styles are defined in `app/globals.css`.
 
-## Testing
-
-To run the test suite:
-
-```
-npm test
-```
-
-To run the test suite in watch mode:
-
-```
-npm run test:watch
-```
-
-To run tests with coverage:
-
-```
-npm run test:coverage
-```
 
 ## Troubleshooting
 
