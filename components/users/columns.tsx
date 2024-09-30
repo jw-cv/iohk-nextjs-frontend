@@ -123,12 +123,12 @@ export const columns: ColumnDef<Customer>[] = [
             <DropdownMenuItem
               onClick={() => navigator.clipboard.writeText(customer.number.toString())}
             >
-              Copy customer number
+              Copy Number
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => navigator.clipboard.writeText(formatDateManually(new Date(customer.birthDate)))}
             >
-              Copy customer birth date
+              Copy Birth Date
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
